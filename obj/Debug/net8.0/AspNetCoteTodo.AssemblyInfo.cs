@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AspNetCoteTodo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c364769b2e486aa62d1bef2e471a4c0b2cab954")]
 [assembly: System.Reflection.AssemblyProductAttribute("AspNetCoteTodo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AspNetCoteTodo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
