@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-AspNetCoreTodo-7b41a3d0-bc68-4a64-8482-afe0bd495501</UserSecretsId>
+    <UserSecretsId>aspnet-AspNetCoreTodo-088b8d66-89b2-453e-be54-499821b7e92d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

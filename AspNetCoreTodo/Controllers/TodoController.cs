@@ -3,25 +3,31 @@ using AspNetCoreTodo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace AspNetCoreTodo.Controllers.Mvc;
-
-public class TodoController : Controller
+namespace AspNetCoreTodo.Controllers.Mvc
 {
-    public IActionResult Index()
+    public class TodoController : Controller
     {
-        // Get to-do items from database
-        // Put items into a model
+        public IActionResult Index()
+        {
+            // Get to-do items from database
 
-        var model = new TodoViewModel();
+            // Put items into a model
+            var model = new TodoViewModel
+            {
+                Items = new List<TodoItem>()
+            };
 
-        var item = new TodoItem();
-        item.DueAt = new DateTimeOffset(new DateTime(2024, 7, 10));
-        item.Title = "This is a test item";
+            var item = new TodoItem
+            {
+                DueAt =  new DateTimeOffset(new DateTime(2024, 7, 12)),
+                Title = "This is a test item"
+            };
 
-        model.Items = new TodoItem[1];
-        model.Items[0] = item;
+            model.Items.Add(item);
 
-        // Render view using the model
-        return View(model);
+            // Render view using the model
+            return View(model);
+
+        }
     }
 }
