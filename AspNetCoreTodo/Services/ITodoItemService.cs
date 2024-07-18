@@ -9,7 +9,8 @@ namespace AspNetCoreTodo.Services
 {
     public interface ITodoItemService
     {
-        // This method requires no parameters and returns a Task<TodoItem[]>
         Task<TodoItem[]> GetIncompleteItemsAsync();
+        
+        Task<bool> AddItemAsync(TodoItem newItem);
     }
 }

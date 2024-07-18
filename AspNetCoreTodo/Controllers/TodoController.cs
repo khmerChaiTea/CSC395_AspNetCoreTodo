@@ -16,7 +16,6 @@ public class TodoController : Controller
         _todoItemService = todoItemService;
     }
 
-    // Action method for handling requests to /Todo/Index
     public async Task<IActionResult> Index()
     {
         // Call service to get incomplete to-do items asynchronously
@@ -32,6 +31,22 @@ public class TodoController : Controller
 
         // Render view using the model, passing the populated view model to the view
         return View(model);
+    }
 
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddItem(TodoItem newItem)
+    {
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction("Index");
+        }
+
+        var successful = await _todoItemService.AddItemAsync(newItem);
+        if (!successful)
+        {
+            return BadRequest(new { error = "Could not add item." });
+        }
+
+        return RedirectToAction("Index");
     }
 }
