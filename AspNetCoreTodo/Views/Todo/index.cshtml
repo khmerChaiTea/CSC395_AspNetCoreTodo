@@ -1,4 +1,5 @@
 @model AspNetCoreTodo.Models.TodoViewModel
+@using AspNetCoreTodo.Models
 @using Humanizer
 
 @{
@@ -21,14 +22,6 @@
         {
             <tr>
                 <td>
-                    <form asp-action="Due date">
-                        <label>Due date:
-                            <input type="date" name="Due date" />
-                        </label>
-                    </form>
-
-                    <p><button>Submit</button></p>
-
                     <form asp-action="MarkDone" method="POST">
                         <input type="checkbox" class="done-checkbox">
                         <input type="hidden" name="id" value="@item.Id">
