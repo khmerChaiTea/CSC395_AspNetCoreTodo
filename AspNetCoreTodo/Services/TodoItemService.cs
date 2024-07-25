@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AspNetCoreTodo.Data;
 using AspNetCoreTodo.Models;
 using AspNetCoreTodo.Services;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +16,12 @@ public class TodoItemService : ITodoItemService
         _context = context;
     }
 
-    public async Task<bool> AddItemAsync(TodoItem newItem)
+    public async Task<bool> AddItemAsync(TodoItem newItem, IdentityUser currentUser)
     {
         newItem.Id = Guid.NewGuid();
         newItem.IsDone = false;
         newItem.DueAt = DateTimeOffset.Now.AddDays(7);
+        newItem.UserId = currentUser.Id;
 
         _context.Items.Add(newItem);
         
@@ -34,10 +36,10 @@ public class TodoItemService : ITodoItemService
             .ToArrayAsync();
     }
 
-    public async Task<bool> MarkDoneAsync(Guid id)
+    public async Task<bool> MarkDoneAsync(Guid id, IdentityUser user)
     {
         var item = await _context.Items
-            .Where(x => x.Id == id)
+            .Where(x => x.Id == id && x.UserId == user.Id)
             .SingleOrDefaultAsync();
 
         if (item == null) return false;
