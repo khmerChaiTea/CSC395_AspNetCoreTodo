@@ -18,6 +18,7 @@ public class TodoController : Controller
     public TodoController(ITodoItemService todoItemService, UserManager<IdentityUser> userManager)
     {
         _todoItemService = todoItemService;
+        _userManager = userManager;
     }
 
     public async Task<IActionResult> Index()
