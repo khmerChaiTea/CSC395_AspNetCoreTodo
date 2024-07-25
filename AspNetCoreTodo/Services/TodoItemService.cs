@@ -29,6 +29,11 @@ public class TodoItemService : ITodoItemService
         return saveResult == 1;
     }
 
+    public Task<bool> AddItemAsync(TodoItem newItem)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<TodoItem[]> GetIncompleteItemsAsync(IdentityUser CurrentUser)
     {
         return await _context.Items
@@ -48,5 +53,10 @@ public class TodoItemService : ITodoItemService
 
         var saveResult = await _context.SaveChangesAsync();
         return saveResult == 1; // One entity should have been updated
+    }
+
+    public Task<bool> MarkDoneAsync(Guid id)
+    {
+        throw new NotImplementedException();
     }
 }
