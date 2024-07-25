@@ -3,23 +3,33 @@ using AspNetCoreTodo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AspNetCoreTodo.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AspNetCoreTodo.Controllers.Mvc;
 
+[Authorize]
 public class TodoController : Controller
 {
     private readonly ITodoItemService _todoItemService;
+    private readonly UserManager<IdentityUser> _userManager;
 
     // Constructor injection: ITodoItemService is injected into the controller
-    public TodoController(ITodoItemService todoItemService)
+    public TodoController(ITodoItemService todoItemService, UserManager<IdentityUser> userManager)
     {
         _todoItemService = todoItemService;
     }
 
     public async Task<IActionResult> Index()
     {
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Challenge();
+        }
+
         // Call service to get incomplete to-do items asynchronously
-        var items = await _todoItemService.GetIncompleteItemsAsync();
+        var items = await _todoItemService.GetIncompleteItemsAsync(currentUser);
         // Get to-do items from database
 
         // Put items into a model

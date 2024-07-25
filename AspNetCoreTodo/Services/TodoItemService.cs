@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AspNetCoreTodo.Data;
 using AspNetCoreTodo.Models;
 using AspNetCoreTodo.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 public class TodoItemService : ITodoItemService
@@ -26,7 +27,7 @@ public class TodoItemService : ITodoItemService
         return saveResult == 1;
     }
 
-    public async Task<TodoItem[]> GetIncompleteItemsAsync()
+    public async Task<TodoItem[]> GetIncompleteItemsAsync(IdentityUser CurrentUser)
     {
         return await _context.Items
             .Where(x => x.IsDone == false)
