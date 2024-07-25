@@ -19,7 +19,7 @@ public class TodoItemService : ITodoItemService
     {
         newItem.Id = Guid.NewGuid();
         newItem.IsDone = false;
-        newItem.DueAt = DateTimeOffset.Now.AddDays(5);
+        newItem.DueAt = DateTimeOffset.Now.AddDays(7);
 
         _context.Items.Add(newItem);
         
@@ -30,7 +30,7 @@ public class TodoItemService : ITodoItemService
     public async Task<TodoItem[]> GetIncompleteItemsAsync(IdentityUser CurrentUser)
     {
         return await _context.Items
-            .Where(x => x.IsDone == false)
+            .Where(x => x.IsDone == false && x.UserId == CurrentUser.Id)
             .ToArrayAsync();
     }
 

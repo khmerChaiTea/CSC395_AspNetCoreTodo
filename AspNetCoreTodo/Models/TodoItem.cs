@@ -4,6 +4,9 @@ namespace AspNetCoreTodo.Models;
 
 public class TodoItem
 {
+    // Add userId
+    public string UserId { get; set; }
+
     // Globally unique identifier
     public Guid Id { get; set; }
 
