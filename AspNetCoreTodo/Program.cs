@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AspNetCoreTodo.Data;
 using AspNetCoreTodo.Services;
+using AspNetCoreTodo;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,21 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ITodoItemService, TodoItemService>();
 
 var app = builder.Build();
+
+// Seed the database with roles and admin user
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        await SeedData.InitializeAsync(services);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Error occurred seeding the DB.");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
