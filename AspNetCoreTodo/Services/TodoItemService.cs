@@ -25,11 +25,13 @@ namespace AspNetCoreTodo.Services
                 .ToArrayAsync();
         }
 
-        public async Task<bool> AddItemAsync(TodoItem newItem)
+        public async Task<bool> AddItemAsync(
+            TodoItem newItem, IdentityUser user)
         {
             // Generate a new ID and set default values
             newItem.Id = Guid.NewGuid();
             newItem.IsDone = false;
+            newItem.UserId = user.Id;
 
             // Ensure DueAt is properly assigned from user input
             if (newItem.DueAt == default)
@@ -45,10 +47,11 @@ namespace AspNetCoreTodo.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> MarkDoneAsync(Guid id)
+        public async Task<bool> MarkDoneAsync(
+            Guid id, IdentityUser user)
         {
             var item = await _context.Items
-                .Where(x => x.Id == id)
+                .Where(x => x.Id == id && x.UserId == user.Id)
                 .SingleOrDefaultAsync();
 
             if (item == null) return false;
