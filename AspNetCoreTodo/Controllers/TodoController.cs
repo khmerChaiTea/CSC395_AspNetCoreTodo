@@ -1,92 +1,59 @@
-using System.Net;
-using AspNetCoreTodo.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using AspNetCoreTodo.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+using AspNetCoreTodo.Models;
 
-namespace AspNetCoreTodo.Controllers.Mvc;
-
-[Authorize]
-public class TodoController : Controller
+namespace AspNetCoreTodo.Controllers
 {
-    private readonly ITodoItemService _todoItemService;
-    private readonly UserManager<IdentityUser> _userManager;
-
-    // Constructor injection: ITodoItemService is injected into the controller
-    public TodoController(ITodoItemService todoItemService, UserManager<IdentityUser> userManager)
+    public class TodoController : Controller
     {
-        _todoItemService = todoItemService;
-        _userManager = userManager;
-    }
+        private readonly ITodoItemService _todoItemService;
 
-    public async Task<IActionResult> Index()
-    {
-        var currentUser = await _userManager.GetUserAsync(User);
-        if (currentUser == null)
+        public TodoController(ITodoItemService todoItemService)
         {
-            return Challenge();
+            _todoItemService = todoItemService;
         }
 
-        // Call service to get incomplete to-do items asynchronously
-        var items = await _todoItemService.GetIncompleteItemsAsync(currentUser);
-        // Get to-do items from database
-
-        // Put items into a model
-        // Prepare view model to pass data to the view
-        var model = new TodoViewModel
+        public async Task<IActionResult> Index()
         {
-            Items = items // Initialize list of to-do items
-        };
+            // Get to-do items from database
+            var items = await _todoItemService.GetIncompleteItemsAsync();
+            
+            // Put items into a model
+            var model = new TodoViewModel()
+            {
+                Items = items
+            };
 
-        // Render view using the model, passing the populated view model to the view
-        return View(model);
-    }
+            // Render view using the model
+            return View(model);
+        }
 
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddItem(TodoItem newItem)
-    {
-        if (!ModelState.IsValid)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddItem(TodoItem newItem)
         {
+            if (!ModelState.IsValid)
+            {
+                // Return to the view with validation errors
+                return RedirectToAction("Index");
+            }
+
+            // Set default values or handle item creation
+            newItem.Id = Guid.NewGuid();
+            newItem.IsDone = false;
+
+            var successful = await _todoItemService.AddItemAsync(newItem);
+            if (!successful)
+            {
+                return BadRequest("Could not add item.");
+            }
+
+            // Redirect to Index
             return RedirectToAction("Index");
         }
-
-        var currentUser = await _userManager.GetUserAsync(User);
-        if (currentUser == null)
-        {
-            return Challenge();
-        }
-
-        var successful = await _todoItemService.AddItemAsync(newItem, currentUser);
-        if (!successful)
-        {
-            return BadRequest(new { error = "Could not add item." });
-        }
-
-        return RedirectToAction("Index");
-    }
-
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> MarkDone(Guid id)
-    {
-        if (id == Guid.Empty)
-        {
-            return RedirectToAction("Index");
-        }
-
-        var currentUser = await _userManager.GetUserAsync(User);
-        if (currentUser == null)
-        {
-            return Challenge();
-        }
-
-        var successful = await _todoItemService.MarkDoneAsync(id, currentUser);
-        if (!successful)
-        {
-            return BadRequest("Could not mark item as done.");
-        }
-        
-        return RedirectToAction("Index");
     }
 }

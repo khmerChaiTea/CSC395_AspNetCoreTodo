@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetCoreTodo.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240725171911_AddItemUserIds")]
-    partial class AddItemUserIds
+    [Migration("20240727014137_AddItems")]
+    partial class AddItems
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,17 +27,12 @@ namespace AspNetCoreTodo.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTimeOffset?>("DueAt")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDone")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

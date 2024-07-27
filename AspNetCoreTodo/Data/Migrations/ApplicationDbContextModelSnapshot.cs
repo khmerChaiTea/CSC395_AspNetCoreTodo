@@ -24,17 +24,12 @@ namespace AspNetCoreTodo.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTimeOffset?>("DueAt")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDone")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
